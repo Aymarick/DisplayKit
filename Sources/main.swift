@@ -14,12 +14,20 @@ while running {
 	while SDL_PollEvent(eventPointer) == 1 {
 		let event : SDL_Event = eventPointer.pointee
 		switch SDL_EventType(rawValue:event.type) {
-			case SDL_FINGERUP:
-				running = false
+            case SDL_FINGERUP:
+            break
+            case SDL_MOUSEBUTTONDOWN:
+                print("Did click at \(event.button.x)x\(event.button.y)")
+                if event.button.clicks == 2 {
+                    running = false
+                }
 			default:
 			break
 		}
-	} 
+        
+        
+	}
+    sleep(ms: 10)
 }
 
 SDL_Quit()
