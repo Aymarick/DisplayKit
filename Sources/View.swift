@@ -11,11 +11,16 @@ import CSDL2
 
 class View {
     
+    var superview: View?
     var subviews = [View]()
     
     var bounds: CGRect = .zero
     var center: CGPoint = .zero
     
+    var clipToBounds = false
+    
+    var cornerRadius: Float?
+
     var backgroundColor: Color?
     
     var frame: CGRect {
@@ -35,8 +40,49 @@ class View {
     
     init() { }
     
-    func draw()
+    func removeFromSuperview()
     {
+        if let superview = superview {
+//            superview.subviews.remove
+        }
+    }
+    
+    func addSubview(_ view: View) {
+        view.removeFromSuperview()
+        subviews.append(view)
+        view.superview = self
+    }
+    
+    
+    func draw(renderer: OpaquePointer)
+    {
+        if let superview = superview {
+            var localFrame = frame
+            localFrame.origin.x += superview.frame.origin.x
+            localFrame.origin.y += superview.frame.origin.y
+            var rect = localFrame.pointer
+            
+//            SDL_RenderSetViewport(renderer, &rect)
+            if let color = backgroundColor {
+                if let cRadius = cornerRadius {
+                    roundedBoxColor(renderer, Int16(localFrame.origin.x + localFrame.width), Int16(localFrame.origin.y), Int16(localFrame.origin.x), Int16(localFrame.origin.y + localFrame.height), Int16(cRadius), color.uint32)
+                }
+                else {
+                    boxColor(renderer, Int16(localFrame.origin.x + localFrame.width), Int16(localFrame.origin.y), Int16(localFrame.origin.x), Int16(localFrame.origin.y + localFrame.height), color.uint32)
+                }
+            }
+            
+            subviews.forEach({
+                $0.draw(renderer: renderer)
+//                SDL_RenderSetViewport(renderer, &rect)
+            })
+        }
         
+    }
+}
+
+extension View : Equatable {
+    static func ==(lhs: View, rhs: View) -> Bool {
+        return false
     }
 }

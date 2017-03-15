@@ -19,11 +19,26 @@ class Window : View {
         windowPointer = SDL_CreateWindow(title, Int32(position.x), Int32(position.y), Int32(size.width), Int32(size.height), 0)
         renderPointer = SDL_CreateRenderer(windowPointer, -1, SDL_RENDERER_ACCELERATED.rawValue)
         super.init()
-        var xPosition: Int32 = 0
-        var yPosition: Int32 = 0
-        SDL_GetWindowPosition(windowPointer, &xPosition, &yPosition)
-        center = CGPoint(x: Int(xPosition), y: Int(yPosition))
         bounds.size = size
+    }
+    
+    override var frame: CGRect {
+        get {
+            return bounds
+        }
+        set { }
+    }
+    
+    func draw() {
+        SDL_SetRenderDrawColor(renderPointer, 0, 0, 0, 1)
+        SDL_RenderClear(renderPointer)
+        draw(renderer: renderPointer)
+        SDL_RenderPresent(renderPointer)
+    }
+    
+    override var superview: View? {
+        get { return self }
+        set {  }
     }
     
 }

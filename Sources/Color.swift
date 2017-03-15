@@ -15,12 +15,20 @@ class Color {
     var b:UInt8 = 0
     var a:UInt8 = 0
     
-    init(r: UInt8, g: UInt8, b:UInt8, a: UInt8 = 1)
+    init(r: UInt8, g: UInt8, b:UInt8, a: UInt8 = 255)
     {
         self.r = r
         self.g = g
         self.b = b
         self.a = a
+    }
+    
+    var uint32 : UInt32 {
+        
+        return UInt32(r) |
+            UInt32(g) << 8 |
+            UInt32(b) << 16 |
+            UInt32(a) << 24
     }
     
     static var red: Color {

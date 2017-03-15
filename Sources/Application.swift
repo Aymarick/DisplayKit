@@ -13,6 +13,9 @@ class Application {
     
     var running = true
     var windows = [Window]()
+    let framerate = UInt32(60)
+    
+    let framerateManagerPointer = UnsafeMutablePointer<FPSmanager>.allocate(capacity: 1)
     
     init?() {
         if SDL_Init(UInt32(SDL_INIT_VIDEO)) == -1 {
@@ -26,6 +29,9 @@ class Application {
     }
     
     func start() -> Int {
+        
+        SDL_initFramerate(framerateManagerPointer)
+        SDL_setFramerate(framerateManagerPointer, framerate)
         
         while running {
             let eventPointer = UnsafeMutablePointer<SDL_Event>.allocate(capacity: 1)
@@ -45,7 +51,10 @@ class Application {
                 
                 
             }
-            sleep(ms: 10)
+            
+            windows.first?.draw()
+            SDL_framerateDelay(framerateManagerPointer)
+            
         }
         
         SDL_Quit()
