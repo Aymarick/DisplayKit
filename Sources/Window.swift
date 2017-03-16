@@ -32,7 +32,7 @@ class Window : View {
     func draw() {
         SDL_SetRenderDrawColor(renderPointer, 0, 0, 0, 1)
         SDL_RenderClear(renderPointer)
-        draw(renderer: renderPointer)
+        draw(renderer: renderPointer, origin: .zero)
         SDL_RenderPresent(renderPointer)
     }
     

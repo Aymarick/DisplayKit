@@ -54,12 +54,12 @@ class View {
     }
     
     
-    func draw(renderer: OpaquePointer)
+    func draw(renderer: OpaquePointer, origin: CGPoint)
     {
-        if let superview = superview {
+        if let _ = superview {
             var localFrame = frame
-            localFrame.origin.x += superview.frame.origin.x
-            localFrame.origin.y += superview.frame.origin.y
+            localFrame.origin.x += origin.x
+            localFrame.origin.y += origin.y
             var rect = localFrame.pointer
             
 //            SDL_RenderSetViewport(renderer, &rect)
@@ -71,9 +71,11 @@ class View {
                     boxColor(renderer, Int16(localFrame.origin.x + localFrame.width), Int16(localFrame.origin.y), Int16(localFrame.origin.x), Int16(localFrame.origin.y + localFrame.height), color.uint32)
                 }
             }
-            
+            var nextOrigin = origin
+//            nextOrigin.x += localFrame.origin.x
+//            nextOrigin.y += localFrame.origin.y
             subviews.forEach({
-                $0.draw(renderer: renderer)
+                $0.draw(renderer: renderer, origin: localFrame.origin)
 //                SDL_RenderSetViewport(renderer, &rect)
             })
         }
